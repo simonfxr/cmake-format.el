@@ -89,13 +89,13 @@ a `before-save-hook'."
 (defun cmake-format-buffer ()
   "Format the current buffer using cmake-format."
   (interactive)
-  (let ((tmpfile (make-nearby-temp-file "cmake-format" nil ".cmake.tmp"))
+  (let ((tmpfile (let ((temporary-file-directory (expand-file-name ".")))
+                   (make-nearby-temp-file "cmake-format" nil ".cmake.tmp")))
         (patchbuf (get-buffer-create "*cmake-format patch*"))
         (err-buf (if cmake-format-show-errors (get-buffer-create "*cmake-format Errors*")))
         (coding-system-for-read 'utf-8)
         (coding-system-for-write 'utf-8)
-        our-fmt-args)
-
+        our-fmt-args cmake-format-args)
     (unwind-protect
         (save-restriction
           (widen)
@@ -134,7 +134,6 @@ a `before-save-hook'."
 
       (kill-buffer patchbuf)
       (delete-file tmpfile))))
-
 
 (defun cmake-format--process-errors (filename tmpfile err-buf)
   "Write errors from running cmake-format TMPFILE into ERR-BUF. FILENAME specifies the original `buffer-name'."
