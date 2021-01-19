@@ -95,7 +95,7 @@ a `before-save-hook'."
         (err-buf (if cmake-format-show-errors (get-buffer-create "*cmake-format Errors*")))
         (coding-system-for-read 'utf-8)
         (coding-system-for-write 'utf-8)
-        our-fmt-args cmake-format-args)
+        (our-fmt-args cmake-format-args))
     (unwind-protect
         (save-restriction
           (widen)
